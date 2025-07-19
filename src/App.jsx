@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "./components/ui/card";
 import { Input } from "./components/ui/input";
 import { Button } from "./components/ui/button";
+import { db } from "./firebase";
+import { ref, onValue, set, remove } from "firebase/database";
 
 export default function LugeQueueApp() {
   const [queue, setQueue] = useState([]);
@@ -12,15 +14,13 @@ export default function LugeQueueApp() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    const savedQueue = localStorage.getItem("lugeQueue");
-    if (savedQueue) {
-      setQueue(JSON.parse(savedQueue));
-    }
+    const queueRef = ref(db, "queue");
+    onValue(queueRef, (snapshot) => {
+      const data = snapshot.val();
+      const loadedQueue = data ? Object.values(data) : [];
+      setQueue(loadedQueue);
+    });
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("lugeQueue", JSON.stringify(queue));
-  }, [queue]);
 
   useEffect(() => {
     const interval = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -37,7 +37,7 @@ export default function LugeQueueApp() {
       rides: parseInt(rides),
       called: false,
     };
-    setQueue([...queue, newEntry]);
+    set(ref(db, `queue/${newEntry.id}`), newEntry);
     setName("");
     setAdults(1);
     setDoubling(0);
@@ -45,7 +45,11 @@ export default function LugeQueueApp() {
   };
 
   const handleCall = (id) => {
-    setQueue(queue.map(entry => entry.id === id ? { ...entry, called: true } : entry));
+    const updatedEntry = queue.find(entry => entry.id === id);
+    if (updatedEntry) {
+      updatedEntry.called = true;
+      set(ref(db, `queue/${id}`), updatedEntry);
+    }
   };
 
   const waitingQueue = queue.filter(entry => !entry.called);
@@ -123,3 +127,7 @@ export default function LugeQueueApp() {
     </div>
   );
 }
+
+
+
+Update App.jsx to use Firebase
