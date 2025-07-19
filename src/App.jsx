@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "./components/ui/card";
+import { Input } from "./components/ui/input";
+import { Button } from "./components/ui/button";
 
 export default function LugeQueueApp() {
   const [queue, setQueue] = useState([]);
@@ -65,34 +65,34 @@ export default function LugeQueueApp() {
               onChange={(e) => setName(e.target.value)}
             />
 
-            <label className="block text-sm font-medium"># Adults</label>
+            <label className="block text-sm font-medium">Number of Adults</label>
             <Input
               type="number"
               min="1"
-              placeholder="# Adults"
+              placeholder="Number of Adults"
               value={adults}
               onChange={(e) => setAdults(e.target.value)}
             />
 
-            <label className="block text-sm font-medium"># Doubling</label>
+            <label className="block text-sm font-medium">Number of Doubling (Kids)</label>
             <Input
               type="number"
               min="0"
-              placeholder="# Doubling"
+              placeholder="Number of Doubling (Kids)"
               value={doubling}
               onChange={(e) => setDoubling(e.target.value)}
             />
 
-            <label className="block text-sm font-medium"># Rides</label>
+            <label className="block text-sm font-medium">Number of Rides</label>
             <Input
               type="number"
               min="1"
-              placeholder="# Rides"
+              placeholder="Number of Rides"
               value={rides}
               onChange={(e) => setRides(e.target.value)}
             />
 
-            <Button onClick={handleAddToQueue}>Add to Queue</Button>
+            <Button onClick={handleAddToQueue}>Check In Group</Button>
           </div>
         </CardContent>
       </Card>
