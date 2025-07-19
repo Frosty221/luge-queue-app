@@ -127,7 +127,3 @@ export default function LugeQueueApp() {
     </div>
   );
 }
-
-
-
-Update App.jsx to use Firebase
